@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: planup-core
+
+  config:
+    import:
+      - classpath:database.yml
+      - classpath:cognito.yml
