@@ -1,0 +1,60 @@
+package com.example.planupcore.domain.schedule;
+
+import com.example.planupcore.domain.schedule.dto.CreateScheduleDto;
+import com.example.planupcore.domain.schedule.dto.ScheduleDetailDto;
+import com.example.planupcore.domain.schedule.dto.ScheduleSummaryDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
+
+@RequestMapping("/api/schedules")
+@RestController
+@RequiredArgsConstructor
+public class ScheduleController {
+
+    private final ScheduleService scheduleService;
+
+    @PostMapping
+    public ResponseEntity<ScheduleDetailDto> createSchedule(
+        @RequestBody CreateScheduleDto dto
+    ) {
+        // @TODO: Replace with authenticated user ID
+        var schedule = scheduleService.saveSchedule(UUID.randomUUID(), dto);
+        return ResponseEntity.status(201).body(schedule);
+    }
+
+    @GetMapping("/{scheduleId}")
+    public ResponseEntity<ScheduleDetailDto> getScheduleDetail(
+        @PathVariable Long scheduleId
+    ) {
+        var schedule = scheduleService.getScheduleDetail(scheduleId);
+        return ResponseEntity.ok(schedule);
+    }
+
+    @GetMapping("/{scheduleId}/summary")
+    public ResponseEntity<ScheduleSummaryDto> getScheduleSummary(
+        @PathVariable Long scheduleId
+    ) {
+        var summary = scheduleService.getScheduleSummary(scheduleId);
+        return ResponseEntity.ok(summary);
+    }
+
+    @PutMapping("/{scheduleId}")
+    public ResponseEntity<ScheduleDetailDto> updateSchedule(
+        @PathVariable Long scheduleId,
+        @RequestBody CreateScheduleDto dto
+    ) {
+        var updated = scheduleService.updateSchedule(scheduleId, dto);
+        return ResponseEntity.ok(updated);
+    }
+
+    @DeleteMapping("/{scheduleId}")
+    public ResponseEntity<Void> deleteSchedule(
+        @PathVariable Long scheduleId
+    ) {
+        scheduleService.deleteSchedule(scheduleId);
+        return ResponseEntity.noContent().build();
+    }
+}
