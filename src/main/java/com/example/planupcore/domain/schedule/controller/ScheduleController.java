@@ -1,6 +1,8 @@
-package com.example.planupcore.domain.schedule;
+package com.example.planupcore.domain.schedule.controller;
 
-import com.example.planupcore.domain.schedule.dto.CreateScheduleDto;
+import com.example.planupcore.domain.schedule.dto.ScheduleUpdateDto;
+import com.example.planupcore.domain.schedule.service.ScheduleService;
+import com.example.planupcore.domain.schedule.dto.ScheduleCreateDto;
 import com.example.planupcore.domain.schedule.dto.ScheduleDetailDto;
 import com.example.planupcore.domain.schedule.dto.ScheduleSummaryDto;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +20,7 @@ public class ScheduleController {
 
     @PostMapping
     public ResponseEntity<ScheduleDetailDto> createSchedule(
-        @RequestBody CreateScheduleDto dto
+        @RequestBody ScheduleCreateDto dto
     ) {
         // @TODO: Replace with authenticated user ID
         var schedule = scheduleService.saveSchedule(UUID.randomUUID(), dto);
@@ -44,7 +46,7 @@ public class ScheduleController {
     @PutMapping("/{scheduleId}")
     public ResponseEntity<ScheduleDetailDto> updateSchedule(
         @PathVariable Long scheduleId,
-        @RequestBody CreateScheduleDto dto
+        @RequestBody ScheduleUpdateDto dto
     ) {
         var updated = scheduleService.updateSchedule(scheduleId, dto);
         return ResponseEntity.ok(updated);

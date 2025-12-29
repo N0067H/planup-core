@@ -1,4 +1,4 @@
-package com.example.planupcore.domain.schedule;
+package com.example.planupcore.domain.schedule.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -43,10 +43,6 @@ public class Schedule {
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
 
     protected Schedule() {}
 

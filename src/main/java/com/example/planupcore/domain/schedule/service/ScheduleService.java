@@ -1,8 +1,11 @@
-package com.example.planupcore.domain.schedule;
+package com.example.planupcore.domain.schedule.service;
 
-import com.example.planupcore.domain.schedule.dto.CreateScheduleDto;
+import com.example.planupcore.domain.schedule.dto.ScheduleCreateDto;
 import com.example.planupcore.domain.schedule.dto.ScheduleDetailDto;
 import com.example.planupcore.domain.schedule.dto.ScheduleSummaryDto;
+import com.example.planupcore.domain.schedule.dto.ScheduleUpdateDto;
+import com.example.planupcore.domain.schedule.entity.Schedule;
+import com.example.planupcore.domain.schedule.repository.ScheduleRepository;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +25,7 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
 
     @Transactional
-    public ScheduleDetailDto saveSchedule(UUID userId, CreateScheduleDto dto) {
+    public ScheduleDetailDto saveSchedule(UUID userId, ScheduleCreateDto dto) {
         var schedule = Schedule.create(
             userId,
             dto.title(),
@@ -52,7 +55,7 @@ public class ScheduleService {
     }
 
     @Transactional
-    public ScheduleDetailDto updateSchedule(Long scheduleId, CreateScheduleDto dto) {
+    public ScheduleDetailDto updateSchedule(Long scheduleId, ScheduleUpdateDto dto) {
         var schedule = scheduleRepository.findById(scheduleId)
                 .orElseThrow(() -> new RuntimeException("Schedule not found with id: " + scheduleId));
 

@@ -1,10 +1,10 @@
 package com.example.planupcore.domain.schedule.dto;
 
-import com.example.planupcore.domain.schedule.ScheduleType;
+import com.example.planupcore.domain.schedule.entity.ScheduleType;
 
 import java.time.LocalDateTime;
 
-public record CreateScheduleDto(
+public record ScheduleUpdateDto(
     String title,
     String description,
     LocalDateTime startTime,

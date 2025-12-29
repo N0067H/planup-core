@@ -1,4 +1,4 @@
-package com.example.planupcore.domain.schedule;
+package com.example.planupcore.domain.schedule.entity;
 
 public enum ScheduleType {
     FIXED,
