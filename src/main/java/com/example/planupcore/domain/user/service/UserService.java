@@ -4,6 +4,7 @@ import com.example.planupcore.domain.user.dto.UserCreateDto;
 import com.example.planupcore.domain.user.dto.UserDetailDto;
 import com.example.planupcore.domain.user.dto.UserSummaryDto;
 import com.example.planupcore.domain.user.entity.User;
+import com.example.planupcore.domain.user.exception.UserNotFoundException;
 import com.example.planupcore.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -46,14 +47,14 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserDetailDto getUserById(UUID id) {
         var user = userRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
+            .orElseThrow(() -> new UserNotFoundException(id));
         return UserDetailDto.fromEntity(user);
     }
 
     @Transactional
     public UserDetailDto updateUser(UUID id, UserCreateDto request) {
         var user = userRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
+            .orElseThrow(() -> new UserNotFoundException(id));
 
         user.changeEmail(request.email());
         user.changeNickname(request.nickname());
@@ -67,7 +68,7 @@ public class UserService {
     @Transactional
     public void deleteUser(UUID id) {
         var user = userRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
+            .orElseThrow(() -> new UserNotFoundException(id));
         userRepository.delete(user);
     }
 }
