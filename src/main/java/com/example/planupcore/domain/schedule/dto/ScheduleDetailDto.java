@@ -12,8 +12,6 @@ public record ScheduleDetailDto(
     String description,
     LocalDateTime startTime,
     LocalDateTime endTime,
-    ScheduleType scheduleType,
-    boolean movable,
     LocalDateTime createdAt
 ) {
     public static ScheduleDetailDto fromEntity(Schedule schedule) {
@@ -23,8 +21,6 @@ public record ScheduleDetailDto(
             schedule.getDescription(),
             schedule.getStartTime(),
             schedule.getEndTime(),
-            schedule.getScheduleType(),
-            schedule.isMovable(),
             schedule.getCreatedAt()
         );
     }

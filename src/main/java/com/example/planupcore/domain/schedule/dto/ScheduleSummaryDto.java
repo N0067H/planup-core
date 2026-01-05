@@ -10,18 +10,14 @@ public record ScheduleSummaryDto(
     UUID id,
     String title,
     LocalDateTime startTime,
-    LocalDateTime endTime,
-    ScheduleType scheduleType,
-    boolean movable
+    LocalDateTime endTime
 ) {
     public static ScheduleSummaryDto fromEntity(Schedule schedule) {
         return new ScheduleSummaryDto(
             schedule.getId(),
             schedule.getTitle(),
             schedule.getStartTime(),
-            schedule.getEndTime(),
-            schedule.getScheduleType(),
-            schedule.isMovable()
+            schedule.getEndTime()
         );
     }
 }

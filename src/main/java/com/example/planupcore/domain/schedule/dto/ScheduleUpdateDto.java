@@ -8,7 +8,5 @@ public record ScheduleUpdateDto(
     String title,
     String description,
     LocalDateTime startTime,
-    LocalDateTime endTime,
-    ScheduleType scheduleType,
-    boolean movable
+    LocalDateTime endTime
 ) {}
