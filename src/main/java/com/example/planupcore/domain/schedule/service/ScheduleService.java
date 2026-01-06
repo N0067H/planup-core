@@ -5,14 +5,16 @@ import com.example.planupcore.domain.schedule.dto.ScheduleDetailDto;
 import com.example.planupcore.domain.schedule.dto.ScheduleSummaryDto;
 import com.example.planupcore.domain.schedule.dto.ScheduleUpdateDto;
 import com.example.planupcore.domain.schedule.entity.Schedule;
-import com.example.planupcore.domain.schedule.exception.ScheduleNotFoundException;
 import com.example.planupcore.domain.schedule.repository.ScheduleRepository;
+import com.example.planupcore.global.exception.ErrorCode;
+import com.example.planupcore.global.exception.ApiException;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class ScheduleService {
@@ -36,7 +38,7 @@ public class ScheduleService {
     @Transactional(readOnly = true)
     public ScheduleDetailDto getScheduleById(UUID scheduleId) {
         var schedule = scheduleRepository.findById(scheduleId)
-                .orElseThrow(() -> new ScheduleNotFoundException(scheduleId));
+            .orElseThrow(() -> new ApiException(ErrorCode.SCHEDULE_NOT_FOUND));
         return ScheduleDetailDto.fromEntity(schedule);
     }
 
@@ -51,7 +53,7 @@ public class ScheduleService {
     @Transactional
     public ScheduleDetailDto updateSchedule(UUID scheduleId, ScheduleUpdateDto request) {
         var schedule = scheduleRepository.findById(scheduleId)
-                .orElseThrow(() -> new ScheduleNotFoundException(scheduleId));
+                .orElseThrow(() -> new ApiException(ErrorCode.SCHEDULE_NOT_FOUND));
 
         schedule.changeTitle(request.title());
         schedule.changeDescription(request.description());
@@ -63,7 +65,7 @@ public class ScheduleService {
     @Transactional
     public void deleteSchedule(UUID scheduleId) {
         var schedule = scheduleRepository.findById(scheduleId)
-                .orElseThrow(() -> new ScheduleNotFoundException(scheduleId));
+                .orElseThrow(() -> new ApiException(ErrorCode.SCHEDULE_NOT_FOUND));
         scheduleRepository.delete(schedule);
     }
 }

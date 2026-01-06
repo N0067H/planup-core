@@ -4,8 +4,9 @@ import com.example.planupcore.domain.user.dto.UserCreateDto;
 import com.example.planupcore.domain.user.dto.UserDetailDto;
 import com.example.planupcore.domain.user.dto.UserSummaryDto;
 import com.example.planupcore.domain.user.entity.User;
-import com.example.planupcore.domain.user.exception.UserNotFoundException;
 import com.example.planupcore.domain.user.repository.UserRepository;
+import com.example.planupcore.global.exception.ApiException;
+import com.example.planupcore.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -47,14 +48,14 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserDetailDto getUserById(UUID id) {
         var user = userRepository.findById(id)
-            .orElseThrow(() -> new UserNotFoundException(id));
+            .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
         return UserDetailDto.fromEntity(user);
     }
 
     @Transactional
     public UserDetailDto updateUser(UUID id, UserCreateDto request) {
         var user = userRepository.findById(id)
-            .orElseThrow(() -> new UserNotFoundException(id));
+            .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
 
         user.changeEmail(request.email());
         user.changeNickname(request.nickname());
@@ -68,7 +69,7 @@ public class UserService {
     @Transactional
     public void deleteUser(UUID id) {
         var user = userRepository.findById(id)
-            .orElseThrow(() -> new UserNotFoundException(id));
+            .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
         userRepository.delete(user);
     }
 }
