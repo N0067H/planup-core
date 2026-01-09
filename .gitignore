@@ -38,3 +38,4 @@ out/
 
 ### Environment ###
 database.yml
+jwt.yml
