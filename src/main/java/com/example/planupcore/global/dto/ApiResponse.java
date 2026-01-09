@@ -1,4 +1,4 @@
-package com.example.planupcore.global.advice;
+package com.example.planupcore.global.dto;
 
 import com.example.planupcore.global.exception.ErrorCode;
 

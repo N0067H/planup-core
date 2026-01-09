@@ -1,8 +1,6 @@
 package com.example.planupcore.domain.user.service;
 
-import com.example.planupcore.domain.user.dto.UserCreateDto;
-import com.example.planupcore.domain.user.dto.UserDetailDto;
-import com.example.planupcore.domain.user.dto.UserSummaryDto;
+import com.example.planupcore.domain.user.dto.*;
 import com.example.planupcore.domain.user.entity.User;
 import com.example.planupcore.domain.user.repository.UserRepository;
 import com.example.planupcore.global.exception.ApiException;
@@ -25,7 +23,7 @@ public class UserService {
 
     @Transactional
     public UserDetailDto createUser(UserCreateDto request) {
-        var user = User.create(
+        var user = User.createUser(
             request.email(),
             request.nickname(),
             request.firstName(),
@@ -53,15 +51,37 @@ public class UserService {
     }
 
     @Transactional
-    public UserDetailDto updateUser(UUID id, UserCreateDto request) {
+    public UserDetailDto updateUser(UUID id, UserUpdateDto request) {
         var user = userRepository.findById(id)
+            .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
+
+        var password = request.password();
+        if (!passwordEncoder.matches(password, user.getHashedPassword())) {
+            throw new ApiException(ErrorCode.INVALID_PASSWORD);
+        }
+
+        user.changeEmail(request.email());
+        user.changeNickname(request.nickname());
+        user.changeFirstName(request.firstName());
+        user.changeLastName(request.lastName());
+
+        var newPassword = request.newPassword();
+        if (newPassword != null && !newPassword.isBlank()) {
+            user.changePassword(passwordEncoder.encode(newPassword));
+        }
+
+        return UserDetailDto.fromEntity(user);
+    }
+
+    @Transactional
+    public UserDetailDto updateUserByAdmin(UUID targetId, AdminUserUpdateDto request) {
+        var user = userRepository.findById(targetId)
             .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
 
         user.changeEmail(request.email());
         user.changeNickname(request.nickname());
         user.changeFirstName(request.firstName());
         user.changeLastName(request.lastName());
-        user.changePassword(passwordEncoder.encode(request.password()));
 
         return UserDetailDto.fromEntity(user);
     }
@@ -69,6 +89,13 @@ public class UserService {
     @Transactional
     public void deleteUser(UUID id) {
         var user = userRepository.findById(id)
+            .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
+        userRepository.delete(user);
+    }
+
+    @Transactional
+    public void deleteUserByAdmin(UUID targetId) {
+        var user = userRepository.findById(targetId)
             .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
         userRepository.delete(user);
     }

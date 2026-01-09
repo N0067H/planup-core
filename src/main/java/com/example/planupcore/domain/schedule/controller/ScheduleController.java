@@ -5,10 +5,10 @@ import com.example.planupcore.domain.schedule.service.ScheduleService;
 import com.example.planupcore.domain.schedule.dto.ScheduleCreateDto;
 import com.example.planupcore.domain.schedule.dto.ScheduleDetailDto;
 import com.example.planupcore.domain.schedule.dto.ScheduleSummaryDto;
-import com.example.planupcore.global.advice.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,9 +23,10 @@ public class ScheduleController {
 
     @PostMapping
     public ResponseEntity<ScheduleDetailDto> createSchedule(
+        @AuthenticationPrincipal UUID userId,
         @RequestBody @Valid ScheduleCreateDto request
     ) {
-        var schedule = scheduleService.createSchedule(UUID.randomUUID(), request);
+        var schedule = scheduleService.createSchedule(userId, request);
         return ResponseEntity.status(201).body(schedule);
     }
 

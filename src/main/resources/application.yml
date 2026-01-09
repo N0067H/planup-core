@@ -5,4 +5,4 @@ spring:
   config:
     import:
       - classpath:database.yml
-      - classpath:cognito.yml
+      - classpath:jwt.yml

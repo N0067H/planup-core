@@ -22,7 +22,7 @@ public class User {
     @Column(columnDefinition = "uuid")
     private UUID id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
@@ -41,6 +41,10 @@ public class User {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole role;
+
     protected User() {}
 
     private User(
@@ -48,16 +52,18 @@ public class User {
         String nickname,
         String firstName,
         String lastName,
-        String hashedPassword
+        String hashedPassword,
+        UserRole role
     ) {
         this.email = email;
         this.nickname = nickname;
         this.firstName = firstName;
         this.lastName = lastName;
         this.hashedPassword = hashedPassword;
+        this.role = role;
     }
 
-    public static User create(
+    public static User createUser(
         String email,
         String nickname,
         String firstName,
@@ -69,7 +75,25 @@ public class User {
             nickname,
             firstName,
             lastName,
-            hashedPassword
+            hashedPassword,
+            UserRole.USER
+        );
+    }
+
+    public static User createAdmin(
+        String email,
+        String nickname,
+        String firstName,
+        String lastName,
+        String hashedPassword
+    ) {
+        return new User(
+            email,
+            nickname,
+            firstName,
+            lastName,
+            hashedPassword,
+            UserRole.ADMIN
         );
     }
 

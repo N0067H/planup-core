@@ -1,7 +1,9 @@
 package com.example.planupcore.global.advice;
 
+import com.example.planupcore.global.dto.ApiResponse;
 import com.example.planupcore.global.exception.ApiException;
 import com.example.planupcore.global.exception.ErrorCode;
+import com.example.planupcore.global.dto.FieldErrorDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
