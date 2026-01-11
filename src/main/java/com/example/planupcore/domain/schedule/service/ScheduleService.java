@@ -51,8 +51,8 @@ public class ScheduleService {
     }
 
     @Transactional
-    public ScheduleDetailDto updateSchedule(UUID scheduleId, ScheduleUpdateDto request) {
-        var schedule = scheduleRepository.findById(scheduleId)
+    public ScheduleDetailDto updateSchedule(UUID userId, UUID scheduleId, ScheduleUpdateDto request) {
+        var schedule = scheduleRepository.findByIdAndUserId(scheduleId, userId)
                 .orElseThrow(() -> new ApiException(ErrorCode.SCHEDULE_NOT_FOUND));
 
         var changed = false;
@@ -84,8 +84,8 @@ public class ScheduleService {
     }
 
     @Transactional
-    public void deleteSchedule(UUID scheduleId) {
-        var schedule = scheduleRepository.findById(scheduleId)
+    public void deleteSchedule(UUID userId, UUID scheduleId) {
+        var schedule = scheduleRepository.findByIdAndUserId(userId, scheduleId)
                 .orElseThrow(() -> new ApiException(ErrorCode.SCHEDULE_NOT_FOUND));
         scheduleRepository.delete(schedule);
     }
